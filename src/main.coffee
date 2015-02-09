@@ -9,9 +9,11 @@ class Sidebar
       e.preventDefault()
       @addBlurb(e.target.title)
 
-      if sessionStorage.getItem("sessionID") == null
-        sessionStorage.setItem("sessionID", Math.random().toString().slice(2,-1))
-        localStorage[sessionStorage.getItem("sessionID")] = []
+    if sessionStorage.getItem("sessionID") == null
+      sessionStorage.setItem("sessionID", Math.random().toString().slice(2,-1))
+    else
+      @blurbs = JSON.parse(localStorage[sessionStorage.getItem("sessionID")])
+      @render()
 
   popBlurb: (title) ->
     for blurb, i in @blurbs
@@ -31,27 +33,24 @@ class Sidebar
         @blurbs.unshift(blurb)
         @render()
 
-  render: ->    
+  render: ->
     $(@selector).html @template({ blurbs: @blurbs })
     localStorage[sessionStorage.getItem("sessionID")] = JSON.stringify(@blurbs)
 
 class Blurb
   template: WikiStack.templates.blurb
   endpoint: (title) ->
-    "http://en.wikipedia.org/w/api.php?action=parse&prop=text&page=#{title}&format=json&redirects=1&section=0"
+    "http://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro&exsentences=10&redirects=true&continue&titles=#{title}"
 
   constructor: (title) ->
     @loading = $.getJSON @endpoint(title), (data) =>
-      @title = data.parse.title
-      html = data.parse.text["*"]
-      obj = $.parseHTML(html)
+      results = data.query.pages
+      for id, article of results
+        @title = title
+        @content = article.extract
+        break
 
-      for el in obj
-        if el.nodeName == 'P'
-          @content = '<p>' + el.innerHTML + '</p>'
-          @html = @render()
-          break
-
+      @html = @render()
       @loading = null
       return @
 
