@@ -1,9 +1,21 @@
 #wikistack-sidebar {
-  width: 350px;
+  width: 380px;
   height: 100%;
   position: fixed;
   top: 0; right: 0;
-  background-color: red;
   overflow-y: scroll;
-  font-size: 0.7em;
+  font-size: 0.9em;
+
+  .blurb {
+    border-bottom: 2px solid #ccc;
+    h3 {
+      margin: 0;
+      padding: 5px 20px;
+      background-color: #ddd;
+    }
+    p {
+      padding: 0 20px;
+      margin: 10px 0 10px 0;
+    }
+  }
 }

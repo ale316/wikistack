@@ -11,6 +11,15 @@ $(document).on 'click', 'a', (e) ->
     results = data.query.pages
     console.log results
     for id, article of results
-      $('#wikistack-sidebar').prepend(article.extract)
+      blurb = WikiStack.templates.blurb({
+        title: article.title
+        content: article.extract
+      })
+      $('#wikistack-sidebar').prepend(blurb)
 
+
+class Sidebar
+  render: WikiStack.templates.sidebar
+  constructor: ->
+    # grab data from localstorage to restore session
 
