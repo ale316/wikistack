@@ -9,6 +9,10 @@ class Sidebar
       e.preventDefault()
       @addBlurb(e.target.title)
 
+      if sessionStorage.getItem("sessionID") == null
+        sessionStorage.setItem("sessionID", Math.random().toString().slice(2,-1))
+        localStorage[sessionStorage.getItem("sessionID")] = []
+
   popBlurb: (title) ->
     for blurb, i in @blurbs
       if blurb.title == title
@@ -27,8 +31,9 @@ class Sidebar
         @blurbs.unshift(blurb)
         @render()
 
-  render: ->
+  render: ->    
     $(@selector).html @template({ blurbs: @blurbs })
+    localStorage[sessionStorage.getItem("sessionID")] = JSON.stringify(@blurbs)
 
 class Blurb
   template: WikiStack.templates.blurb
@@ -40,7 +45,6 @@ class Blurb
       @title = data.parse.title
       html = data.parse.text["*"]
       obj = $.parseHTML(html)
-      console.log data
 
       for el in obj
         if el.nodeName == 'P'
