@@ -1,0 +1,15 @@
+{
+   "name": "Wiki Stack",
+   "description": "Keep safe from the wiki hole!",
+   "version": "0.1",
+   "manifest_version": 2,
+
+   "permissions": ["http://*.wikipedia.org/w/api.php", "https://*.wikipedia.org/w/api.php"],
+   "content_scripts": [ {
+      "run_at": "document_end",
+      "css": [ "dist/css/wikistack.css" ],
+      "js": [ "dist/js/wikistack-libs.js", "dist/js/wikistack-templates.js", "dist/js/wikistack.js"],
+      "matches": [ "http://*.wikipedia.org/wiki/*", "https://*.wikipedia.org/wiki/*" ]
+   } ]
+   // "web_accessible_resources": ["dist/js/libs/jquery.min.map"]
+}

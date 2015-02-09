@@ -1,0 +1,17 @@
+{
+  "name": "wikistack",
+  "version": "0.1",
+  "authors": [
+    "Alessandro Marin <alessandro.m316@gmail.com>"
+  ],
+  "description": "Keep safe from the wiki hole!",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src/libs",
+    "test",
+    "tests"
+  ]
+}
