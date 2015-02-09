@@ -7,13 +7,25 @@ class Sidebar
     # grab data from localstorage to restore session?
     $('#content').on 'click', 'a', (e) =>
       e.preventDefault()
-      blurb = new Blurb(e.target.title)
-      blurb.loading.done =>
-        @addBlurb(blurb)
+      @addBlurb(e.target.title)
 
-  addBlurb: (blurb) ->
-    @blurbs.unshift(blurb)
-    @render()
+  popBlurb: (title) ->
+    for blurb, i in @blurbs
+      if blurb.title == title
+        @blurbs.splice(i, 1)
+        return blurb
+    return false
+
+  addBlurb: (title) ->
+    found = @popBlurb(title)
+    if found
+      @blurbs.unshift(found)
+      @render()
+    else
+      blurb = new Blurb(title)
+      blurb.loading.done =>
+        @blurbs.unshift(blurb)
+        @render()
 
   render: ->
     $(@selector).html @template({ blurbs: @blurbs })
