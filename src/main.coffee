@@ -39,7 +39,7 @@ class Blurb
     @loading = $.getJSON @endpoint(title), (data) =>
       results = data.query.pages
       for id, article of results
-        @title = article.title
+        @title = title
         @content = article.extract
         break
 
