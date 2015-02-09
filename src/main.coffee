@@ -20,15 +20,23 @@ class Sidebar
 
 class Blurb
   template: WikiStack.templates.blurb
-  endpoint: "http://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro&exsentences=10&redirects=true&continue&titles="
+  endpoint: (title) ->
+  	"http://en.wikipedia.org/w/api.php?action=parse&page=#{title}&format=json&section=0"
+
   constructor: (title) ->
-    @loading = $.getJSON @endpoint+title, (data) =>
-      results = data.query.pages
-      for id, article of results
-        @title = article.title
-        @content = article.extract
-        break
-      @html = @render()
+    @loading = $.getJSON @endpoint(title), (data) =>
+
+    	@title = data.parse.title
+    	html = data.parse.text["*"]
+	    obj = $.parseHTML(html)	
+
+	    for el in obj
+	    	if el.nodeName == 'P'
+	    		@content = '<p>' + el.innerHTML + '</p>'
+	    		console.log @content
+	    		@html = @render()
+	    		break
+      
       @loading = null
     return @
 
