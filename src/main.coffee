@@ -12,7 +12,11 @@ class Sidebar
         @addBlurb(blurb)
 
   addBlurb: (blurb) ->
-    $(@selector).prepend blurb.render()
+    @blurbs.unshift(blurb)
+    @render()
+
+  render: ->
+    $(@selector).html @template({ blurbs: @blurbs })
 
 class Blurb
   template: WikiStack.templates.blurb
@@ -24,6 +28,7 @@ class Blurb
         @title = article.title
         @content = article.extract
         break
+      @html = @render()
       @loading = null
     return @
 
