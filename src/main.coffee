@@ -9,8 +9,22 @@ class Sidebar
       e.preventDefault()
       @addBlurb(e.target.title)
 
+
     if sessionStorage.getItem("sessionID") == null
       sessionStorage.setItem("sessionID", Math.random().toString().slice(2,-1))
+
+      sessionList = localStorage.getItem("sessionList")
+      sessionList = if sessionList then JSON.parse(sessionList) else []
+
+      for session in sessionList
+        console.log session
+        if not session.saved
+          localStorage.removeItem(session._id)
+
+      sessionList.push({_id : sessionStorage.getItem("sessionID"), saved : false})
+
+      localStorage.setItem("sessionList", JSON.stringify(sessionList))
+
     else
       @blurbs = JSON.parse(localStorage[sessionStorage.getItem("sessionID")])
       @render()
