@@ -14,7 +14,7 @@ class Sidebar
       sessionStorage.setItem("sessionID", Math.random().toString().slice(2,-1))
 
       sessionList = localStorage.getItem("sessionList")
-      sessionList = if sessionList then JSON.parse(sessionList) else []
+      sessionList = if sessionList and sessionList != "" then JSON.parse(sessionList) else []
 
       for session in sessionList
         if not session.saved
