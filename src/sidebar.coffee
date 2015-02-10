@@ -9,7 +9,7 @@ class Sidebar
     $('body').on 'click', 'a', (e) =>
       if @canOpenLink
         e.preventDefault()
-        @addBlurb(e.target.title)
+        @addBlurb(e.target.title, e.target.href)
     $(document).on 'keydown', (e) =>
       if e.which == 90
         @canOpenLink = true
@@ -42,13 +42,13 @@ class Sidebar
         return blurb
     return false
 
-  addBlurb: (title) ->
+  addBlurb: (title, link) ->
     found = @popBlurb(title)
     if found
       @blurbs.unshift(found)
       @render()
     else
-      blurb = new Blurb(title)
+      blurb = new Blurb(title, link)
       blurb.loading.done =>
         @blurbs.unshift(blurb)
         @render()

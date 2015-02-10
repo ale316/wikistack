@@ -27,5 +27,13 @@
         display: block;
       }
     }
+    a.swap {
+      margin-right: 5px;
+      margin-bottom: -2px;
+      width: 17px; height: 17px;
+      display: inline-block;
+      background: url("chrome-extension://kpfjoccppcfmmflcnhmjbnlmdeijojbb/dist/img/arrow-swap.png") center;
+      background-size: 17px 17px;
+    }
   }
 }
