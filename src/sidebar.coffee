@@ -6,7 +6,7 @@ class Sidebar
   constructor: ->
     $('body').append(@template())
     # grab data from localstorage to restore session?
-    $('body').on 'click', 'a', (e) =>
+    $('#content').on 'click', 'a', (e) =>
       if @canOpenLink
         e.preventDefault()
         @addBlurb(e.target.title, e.target.href)
@@ -16,6 +16,12 @@ class Sidebar
     $(document).on 'keyup', (e) =>
       if e.which == 90
         @canOpenLink = false
+    $(@selector).on 'click', '.swap', (e) =>
+      e.preventDefault()
+      url = window.location.href.split('wikipedia.org')
+      blurb = @popBlurb(e.target.title)
+      @addBlurb($('#firstHeading').children('span').html(), url[1])
+      window.location.href = "#{e.target.href}"
 
     if sessionStorage.getItem("sessionID") == null
       sessionStorage.setItem("sessionID", Math.random().toString().slice(2,-1))
@@ -40,6 +46,7 @@ class Sidebar
       if blurb.title == title
         @blurbs.splice(i, 1)
         return blurb
+    
     return false
 
   addBlurb: (title, link) ->
