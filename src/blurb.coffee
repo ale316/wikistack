@@ -5,11 +5,14 @@ class Blurb
 
   constructor: (title, link) ->
     @loading = $.getJSON @endpoint(title), (data) =>
+
+
       results = data.query.pages
       for id, article of results
         @title = title
-        @content = article.extract
         @link = link
+        text = article.extract
+        @content = if text.split(".").length < 2 then "Summary Unavailible, click to view" else text
         break
 
       @html = @render()
