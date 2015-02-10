@@ -2,13 +2,20 @@ class Sidebar
   selector: '#wikistack-sidebar'
   template: WikiStack.templates.sidebar
   blurbs: []
+  canOpenLink: false
   constructor: ->
     $('body').append(@template())
     # grab data from localstorage to restore session?
-    $('#content').on 'click', 'a', (e) =>
-      e.preventDefault()
-      @addBlurb(e.target.title)
-
+    $('body').on 'click', 'a', (e) =>
+      if @canOpenLink
+        e.preventDefault()
+        @addBlurb(e.target.title)
+    $(document).on 'keydown', (e) =>
+      if e.which == 90
+        @canOpenLink = true
+    $(document).on 'keyup', (e) =>
+      if e.which == 90
+        @canOpenLink = false
 
     if sessionStorage.getItem("sessionID") == null
       sessionStorage.setItem("sessionID", Math.random().toString().slice(2,-1))
