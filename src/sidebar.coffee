@@ -9,7 +9,7 @@ class Sidebar
     $('#content').on 'click', 'a', (e) =>
       if @canOpenLink
         e.preventDefault()
-        @addBlurb(e.target.title, e.target.href)
+        @addBlurb(e.target.title, e.target.href, @render)
     $(document).on 'keydown', (e) =>
       if e.which == 90
         @canOpenLink = true
@@ -20,8 +20,9 @@ class Sidebar
       e.preventDefault()
       url = window.location.href.split('wikipedia.org')
       blurb = @popBlurb(e.target.title)
-      @addBlurb($('#firstHeading').children('span').html(), url[1])
-      window.location.href = "#{e.target.href}"
+      @addBlurb($('#firstHeading').text(), url[1], =>
+        @save()
+        window.location.href = "#{e.target.href}")
 
     if sessionStorage.getItem("sessionID") == null
       sessionStorage.setItem("sessionID", Math.random().toString().slice(2,-1))
@@ -49,17 +50,22 @@ class Sidebar
     
     return false
 
-  addBlurb: (title, link) ->
+  # This should probably always return a promise instead of implementing
+  # callbacks wrongly
+  addBlurb: (title, link, cb) ->
     found = @popBlurb(title)
     if found
       @blurbs.unshift(found)
-      @render()
+      cb() if cb?
     else
       blurb = new Blurb(title, link)
       blurb.loading.done =>
         @blurbs.unshift(blurb)
-        @render()
+        cb() if cb?
 
-  render: ->
-    $(@selector).html @template({ blurbs: @blurbs })
+  save: =>
     localStorage[sessionStorage.getItem("sessionID")] = JSON.stringify(@blurbs)
+
+  render: =>
+    $(@selector).html @template({ blurbs: @blurbs })
+    @save()
